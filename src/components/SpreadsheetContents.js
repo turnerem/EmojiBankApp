@@ -5,7 +5,6 @@ import SpreadsheetItem from './SpreadsheetItem';
 
 const SpreadsheetContents = () => {
   const { categories, isSave } = useContext(StoreContext);
-  console.log(categories, "THE CATEGORIES")
   return (
       <View style={styles.container}>
       <FlatList

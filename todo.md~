@@ -30,6 +30,7 @@
 
 ## Pretty:
 - use lots of space around things, but avoid big font. This will avoid it looking childish, but make it look airy
+- on portrait view: can pull up from bottom to see bar charts. As these pull up, background of spreadsheet view fades
 
 ## Add Category - checks on inputs:
 - If category or emoji already used elsewhere, flag error.

@@ -2,10 +2,9 @@ import React, {useContext, useRef, useEffect, useState} from 'react'
 import { StyleSheet, Text, View, Animated } from 'react-native'
 import { TouchableHighlight, TextInput } from 'react-native-gesture-handler'
 import { StoreContext } from '../../store'
+import db from '../Database'
 
-const SpreadsheetItem = (item) => {
-  console.log("The ITEMS")
-  
+const SpreadsheetItem = (item) => {  
   const { 
     tapped, setTapped,
     poundVal, setPoundVal
@@ -27,6 +26,8 @@ const SpreadsheetItem = (item) => {
       setTapped(!tapped)
     } else {
       setPoundVal(poundVal + parseInt(newAmt !== "" ? newAmt : 0));
+      // How to add cat in here... something to do with useRef
+      // db.addSave()
       setNewAmt("")
       Animated.timing(growAnim, {
         toValue: 0.0,
@@ -62,7 +63,7 @@ const SpreadsheetItem = (item) => {
             style={styles.input} 
             placeholer={0}
             keyboardType='numeric'
-            value={Number(newAmt)}
+            value={newAmt}
             onChangeText={setNewAmt}
           />
         </Animated.View>

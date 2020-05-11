@@ -43,6 +43,9 @@
   - but only one row should ever have a text input box
 - when list reaches 6 cats, don't allow anymore
 
+## Categories:
+- Should be taking categories and adding on values for rendering totals of each spend/save. What's the best way to do all this?
+
 ## Utils:
 - Maybe make a better num formatter
 

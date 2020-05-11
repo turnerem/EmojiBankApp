@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import { StoreContext } from '../../store';
-import { StyleSheet, Text, View, TouchableHighlight, Alert } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
+import { TextInput } from 'react-native-gesture-handler';
+import db from "../Database"
 
 const AddCat = () => {
   const { 
@@ -9,6 +10,11 @@ const AddCat = () => {
     catEmoji, setCatEmoji, 
     categories, setCategories 
   } = useContext( StoreContext )
+
+  const sqlAddCat = (cat, catEmoji) => {
+    db.addCat(cat, catEmoji)
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -38,6 +44,7 @@ const AddCat = () => {
           style={styles.button}
           onPress={() => {
             setCategories([...categories, {cat, catEmoji}])
+            sqlAddCat(cat, catEmoji)
             setCat("");
             setCatEmoji("");
           }}
