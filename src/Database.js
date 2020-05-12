@@ -2,25 +2,42 @@ import * as SQLite from 'expo-sqlite';
 // import { DbInitialization } from './DbInitialization';
 // import { createTables, getDbVersion } from './DbInitialization'
 
-/*
-Notes on sqlite:
-executeSql:
-SQLitePlugin.prototype.executeSql = function(sstatement, params, success, error) (in sqlite.core.js)
-*/
+// Wondering about SQLITE:
+// https://stackoverflow.com/questions/47512338/should-i-open-and-close-db-for-every-db-operation-in-sqlite
+// https://developer.android.com/training/data-storage/sqlite
+// takeaway: Don't open and close db with every update/interaction
 
-// try export a single instance of Database class XX
-// make a js class called database, the a class dbImplementation implmenting database, then... stuff
+// https://www.sqlite.org/howtocorrupt.html
+// Nice overview for TROUBLESHOOTING
+
+// https://sqlite.org/optoverview.html
+// overview of optimization
+
+// https://brucelefebvre.com/blog/2018/11/06/react-native-offline-first-db-with-sqlite/
+// Discussing, inter alia, lifecycle management
+// open db when app is running in foreground, and close when it bops back to the background
+
+// I think I need this object, because I srote an open db in it, 
+// and check whether it's open before trying to open another. So things can't get tangled.
+// could possibly also use the backpack of a function for this stuff. What's the difference?
+// Make open db a private method
+
 class Database {
 
   constructor() {
     this.database = undefined
   }
   
-  openDb = () => {
+  _openDb = () => {
+    // On disk, the database will be created under the app's documents directory, i.e. ${FileSystem.documentDirectory}/SQLite/${name}.
     const db = SQLite.openDatabase("EmojiBank.db")
+
+    // db.transaction(callback, error, success)
     db.transaction(tx => {
       // both these contain executeSqls. They are being enqueued. ENQUEUED.
       // createTables(tx)
+
+      //tx.executeSql(sqlStatement, arguments, success, error)
       tx.executeSql(
         `CREATE TABLE IF NOT EXISTS Categories (
           cat_id INTEGER NOT NULL PRIMARY KEY, 
@@ -64,13 +81,14 @@ class Database {
       )
     })
     this.database = db;
-    return db;
+    // return db;
   }
 
   closeDb = () => {
+    console.log("Closing DB now")
     if (this.database !== undefined) {
       // might need to remove underscore, or pass argument, or just use debugger
-      db._db.close();
+      this.database._db.close();
     }
   };
 
@@ -79,7 +97,7 @@ class Database {
     if (this.database !== undefined) {
       return this.database;
     }
-    return this.openDb();
+    return this._openDb();
   }
 
   // might need to return something

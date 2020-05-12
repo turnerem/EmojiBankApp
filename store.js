@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import db from './src/Database';
 
 export const StoreContext = React.createContext();
 
@@ -8,6 +9,8 @@ export const StoreContext = React.createContext();
 // in particular: how is the following function differenct from using a reducer?
 
 // ANONYMOUS FUNCTION!
+
+
 
 export default ({ children }) => {
   const [ categories, setCategories ] = useState([{cat: "Cream", catEmoji: "🥛"}, {cat: "Mangoes", catEmoji: "🥭"}]);

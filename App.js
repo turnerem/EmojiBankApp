@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import StoreProvider from './store';
-import { StyleSheet, View } from 'react-native';
+import { AppState } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignupLogin from './src/SignupLogin';
 import AddCategories from './src/AddCategories';
 import Spreadsheet from './src/Spreadsheet';
+import db from './src/Database';
 
 const Stack = createStackNavigator();
 export default function App() {
+  useEffect(() => {
+    AppState.addEventListener("change", (appState) => console.log("The app state", appState))
+    // console.log("Closing DB!")
+    // is useEffect (in App.js) basically already checking whether or not AppState is active?
+    // LOOK in console.log - DB is getting closed when app opens (because we're immediately navigating to another view?). This won't do
+    // Maybe need a reducer to track background/foreground transitions. Could even use this instead of setting this.databse in the constructor of Database.js
+    return db.closeDb()
+    
+  })
+  // updating db. Now tracking AppState in App.js, and closeing DB at appropriate moment.'
   return (
     // <View style={{backgroundColor: 'ivory'}}>
       <StoreProvider>
@@ -24,12 +35,3 @@ export default function App() {
     // </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
