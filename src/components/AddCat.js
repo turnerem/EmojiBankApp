@@ -12,7 +12,7 @@ const AddCat = () => {
   } = useContext( StoreContext )
 
   const sqlAddCat = (cat, catEmoji) => {
-    db.addCat(cat, catEmoji)
+    // db.addCat(cat, catEmoji)
   }
 
   return (

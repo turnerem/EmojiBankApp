@@ -106,7 +106,7 @@ class Database {
       tx.executeSql(
         `SELECT * FROM ?;`, 
         [tab],
-        ([result]) => {
+        (_, result) => {
           console.log(result.rows.length, 'row count in TAB\n\n')
           // for (let i = 0; i < res.rows.length; i++) {
           //   console.log("ITEM ", i, res.rows.item(i))

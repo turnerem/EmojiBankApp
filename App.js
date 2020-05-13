@@ -10,6 +10,7 @@ import db from './src/Database';
 
 const Stack = createStackNavigator();
 export default function App() {
+  
   useEffect(() => {
     AppState.addEventListener("change", (appState) => console.log("The app state", appState))
     // console.log("Closing DB!")

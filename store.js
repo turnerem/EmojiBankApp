@@ -13,6 +13,8 @@ export const StoreContext = React.createContext();
 
 
 export default ({ children }) => {
+  const [ openDb, setOpenDb ] = useState(undefined);
+
   const [ categories, setCategories ] = useState([{cat: "Cream", catEmoji: "🥛"}, {cat: "Mangoes", catEmoji: "🥭"}]);
   const [ cat, setCat ] = useState("");
   const [ catEmoji, setCatEmoji ] = useState("");
@@ -22,6 +24,7 @@ export default ({ children }) => {
   const [ isSave, setIsSave ] = useState(true);
 
   const store = {
+    openDb, setOpenDb,
     categories, setCategories,
     cat, setCat,
     catEmoji, setCatEmoji,
