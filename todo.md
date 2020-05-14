@@ -46,6 +46,17 @@
 ## Categories:
 - Should be taking categories and adding on values for rendering totals of each spend/save. What's the best way to do all this?
 
+## Desireable frontend interactions with DB
+- get a table
+- add new category
+- add new spend / save for a category and a time (default time is present)
+- patch category
+- patch spend / save amount / time / category
+- each item with totals for a given time span
+- timeseries of totals for one for varying intervals
+- timeseries of overall totals for varying intervals
+
+
 ## Utils:
 - Maybe make a better num formatter
 
