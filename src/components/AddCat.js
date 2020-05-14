@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { StoreContext } from '../../store';
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
-import db from "../Database"
+import useDb from '../../database/useDb'
 
 const AddCat = () => {
   const { 
@@ -10,6 +10,10 @@ const AddCat = () => {
     catEmoji, setCatEmoji, 
     categories, setCategories 
   } = useContext( StoreContext )
+
+  // What to pass to useDb here? Categories from context?
+  // that's mixing useState and useReducer!
+  const { data, sql } = useDb()
 
   const sqlAddCat = (cat, catEmoji) => {
     // db.addCat(cat, catEmoji)

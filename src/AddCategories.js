@@ -5,15 +5,23 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import CatItem from './components/CatItem';
 import AddCat from './components/AddCat';
 import { useNavigation } from '@react-navigation/native';
+import useDb from '../database/useDb'
 
 const AddCategories = () => {
   const { categories } = useContext( StoreContext );
   const navigation = useNavigation()
 
-  // useEffect(() => {}, [categoriesC[0]])
-  // const dummy = ['a', 'b', 'c', 'd', 'e', 'f'].map((val) => {
-  //   return { cat: val, catEmoji: "" }
-  // })
+  const { 
+    data,
+    sql
+  } = useDb([])
+
+
+  useEffect(() => {
+    sql.getAll('Categories')
+  }, [data])
+
+
   // console.log(categoriesC[0])
   return (
     <View style={styles.container}>

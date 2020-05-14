@@ -1,10 +1,13 @@
-import React, { useContext, useReducer, useState } from 'react'
+import React, { useContext, useReducer } from 'react'
 import { View, Text } from 'react-native'
 import { StoreContext } from '../store'
 
-const useDb = (tab, initialData) => {
+const useDb = (initialData = []) => {
 
-  const { openDb, setOpenDb } = useContext(StoreContext)
+  const { 
+    openDb, setDb,
+
+  } = useContext(StoreContext)
 
   // SQLite is not async, but lets pretend it is. 
   // Also, if end up popping this on a backend, will be handling async then
@@ -121,7 +124,10 @@ const useDb = (tab, initialData) => {
         (_, result) => console.log(result.rows._array)
       )
     })
-    setOpenDb(db);
+    setDb({
+      type: "OPEN_DB",
+      data: db
+    });
     // return db;
   }
 
@@ -129,7 +135,9 @@ const useDb = (tab, initialData) => {
     console.log("Closing DB now")
     if (openDb !== undefined) {
       // might need to remove underscore, or pass argument, or just use debugger
-      openDb._db.close();
+      setDb({
+        type: "CLOSE_DB"
+      })
     }
   };
 
@@ -141,11 +149,12 @@ const useDb = (tab, initialData) => {
     return this._openDb();
   }
 
-  getAllTab = (tab) => {
+  getAll = (tab) => {
     this.getDatabase().transaction(tx => {
       tx.executeSql(
         `SELECT * FROM ?;`, 
         [tab],
+        // success cb
         (_, result) => {
           console.log(result.rows.length, 'row count in TAB\n\n')
           dispatch({
@@ -153,6 +162,7 @@ const useDb = (tab, initialData) => {
             data: result.rows._array
           })
         },
+        // failure cb
         (_, err) => {
           dispatch({
             type: "GET_FAILURE",
@@ -176,12 +186,17 @@ const useDb = (tab, initialData) => {
         `INSERT INTO ? (` + placeholders + `)
         VALUES (` + placeholders + `);`,
         [ tab, ...colNames, ...row ],
+        // success cb
         (_, result) => {
           console.log(`new row added with id ${result.insertId}.`)
           dispatch({
             type: "ADDED_ITEM",
             newItem: result.rows._array
           })
+        },
+        // failure cb
+        (_, result) => {
+          console.log("item not added, soz")
         }
       )
     })
@@ -192,9 +207,18 @@ const useDb = (tab, initialData) => {
   }
 
   // The stuff that will always happen when useDb is called for a given tab:
-  getAllTab(tab)
+  // Do i always want to invoke this here? Or 
+  // getAll(tab)
 
-  return { ...state, addItem, updateItem }
+  return { 
+    ...state, 
+
+    sql: {
+      getAll, 
+      addItem, 
+      updateItem }, 
+
+    closeDb }
 }
 
 export default useDb
