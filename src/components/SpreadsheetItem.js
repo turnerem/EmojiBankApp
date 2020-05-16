@@ -2,24 +2,24 @@ import React, {useContext, useRef, useEffect, useState} from 'react'
 import { StyleSheet, Text, View, Animated } from 'react-native'
 import { TouchableHighlight, TextInput } from 'react-native-gesture-handler'
 import { StoreContext } from '../../store'
+import fetchCats from '../../database/fetchCats'
 // import db from '../Database'
 
 const SpreadsheetItem = (item) => {  
   const { 
     tapped, setTapped,
-    poundVal, setPoundVal
+    newAmt, setNewAmt
   } = useContext(StoreContext);
 
-  const [ newAmt, setNewAmt ] = useState("");
 
   useEffect(() => {
     // Here, want to getCats with totals tacked on
     // If there's no spend/save data yet, should hopefully have a total returned from SQL of 0
-
+    // fetchCats.getCats()
   }, [newAmt])
 
   const growAnim = useRef(new Animated.Value(0)).current;
-  const growBox = () => {
+  const growBox = (cat_id) => {
     if (tapped) {
       Animated.timing(growAnim, {
         toValue: 1.2,
@@ -27,7 +27,7 @@ const SpreadsheetItem = (item) => {
       }).start() 
       setTapped(!tapped)
     } else {
-      setPoundVal(poundVal + parseInt(newAmt !== "" ? newAmt : 0));
+      fetchCats.addSave(cat_id, Math.round((new Date()).getTime() / 1000), parseInt(newAmt))
       // How to add cat in here... something to do with useRef
       // db.addSave()
       setNewAmt("")
@@ -41,7 +41,7 @@ const SpreadsheetItem = (item) => {
   return (
     <TouchableHighlight 
       style={styles.button}
-      onPress={growBox}
+      onPress={() => growBox(item.cat_id)}
     >
       <View style={styles.container}>
         <View style={styles.textBox}>
@@ -57,7 +57,7 @@ const SpreadsheetItem = (item) => {
             £
           </Text>
           <Text style={styles.numVariable}>
-            {poundVal.toFixed(2)}
+            { item.amount }
           </Text>
         </View>
         <Animated.View style={[styles.inputBox, { flex: growAnim }]}>

@@ -109,6 +109,19 @@ const deleteAllCats = () => {
     )
   })
 }
+
+const addSave = (cat_id, timestamp, amount) => {
+  connection.getDb().transaction(tx => {
+    tx.executeSql(
+      `INSERT INTO SaveEvents ( cat_id, timestamp, amount )
+       VALUES ( ?, ?, ? )`,
+       [ cat_id, timestamp, amount],
+       () => {
+         console.log("item added to SPEND\n")
+       }
+    )
+  })
+}
   
   
   // updateItem = (tab, colName, item) => {
@@ -118,6 +131,6 @@ const deleteAllCats = () => {
   // return {  }
 // }
 
-export default { getCats, addCat, deleteAllCats }
+export default { getCats, addCat, deleteAllCats, addSave }
 
 

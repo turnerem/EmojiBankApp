@@ -21,8 +21,8 @@ export default ({ children }) => {
   const [ catEmoji, setCatEmoji ] = useState("");
   const [ tapped, setTapped ] = useState(false);
   // Really, poundVal needs to take values from SQL spreadsheet
-  const [ poundVal, setPoundVal ] = useState(0);
   const [ isSave, setIsSave ] = useState(true);
+  const [ newAmt, setNewAmt ] = useState("");
 
   const store = {
     categories, setCategories,
@@ -30,8 +30,8 @@ export default ({ children }) => {
     cat, setCat,
     catEmoji, setCatEmoji,
     tapped, setTapped,
-    poundVal, setPoundVal,
-    isSave, setIsSave
+    isSave, setIsSave,
+    newAmt, setNewAmt
   }
 
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>

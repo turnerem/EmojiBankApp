@@ -7,7 +7,7 @@ import fetchCats from '../../database/fetchCats';
 const SpreadsheetContents = () => {
   const { 
     categories, setCategories,
-    isSave 
+    isSave, newAmt
   } = useContext(StoreContext);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const SpreadsheetContents = () => {
       setCategories(data) 
       console.log(data)
     })
-  }, [])
+  }, [newAmt])
   return (
       <View style={styles.container}>
       <FlatList
