@@ -5,7 +5,7 @@ const CatItem = (item) => {
   return (
     <View style={styles.container}>
       <View style={[ styles.catEmojiBox, styles.textBox ]}>
-        <Text style={styles.catEmoji}>{item.catEmoji}</Text>
+        <Text style={styles.catEmoji}>{item.cat_emoji}</Text>
       </View>
       <View style={[ styles.catBox, styles.textBox ]}>
         <Text style={styles.cat}>{item.cat}</Text>

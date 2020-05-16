@@ -13,7 +13,6 @@ import Profile from './components/Profile';
 const Tab = createMaterialTopTabNavigator();
 
 const Spreadsheet = () => {
-  const { categories } = useContext(StoreContext)
   return (
     <Tab.Navigator>
       <Tab.Screen name="Savings" component={SaveSpreadsheet} />

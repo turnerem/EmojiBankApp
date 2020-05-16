@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import db from './src/Database';
+// import fetchCats from './database/fetchCats'
 
 export const StoreContext = React.createContext();
 
@@ -13,23 +13,10 @@ export const StoreContext = React.createContext();
 
 export default ({ children }) => {
 
-  const dbAccess = (state, action) => {
-    // does something need to be returned for openDb to be updated?
-    switch ( action.type ) {
-      case "OPEN_DB":
-        return action.data
-
-      case "CLOSE_DB": {
-        console.log("Closing the db in REDUCER")
-        state._db.close();
-        return undefined;
-      }
-    }
-  }
-  
-  const [ openDb, setDb ] = useState(dbAccess, undefined);
-
-  const [ categories, setCategories ] = useState([{cat: "Cream", catEmoji: "🥛"}, {cat: "Mangoes", catEmoji: "🥭"}]);
+  const [ categories, setCategories ] = useState([]);
+  // XX Is use of catsCount a bit hacky?
+  // Motivation: update categories in AddCategories every time a cat is added / removed
+  const [ catsCount, setCatsCount ] = useState(0);
   const [ cat, setCat ] = useState("");
   const [ catEmoji, setCatEmoji ] = useState("");
   const [ tapped, setTapped ] = useState(false);
@@ -38,8 +25,8 @@ export default ({ children }) => {
   const [ isSave, setIsSave ] = useState(true);
 
   const store = {
-    openDb, setDb,
     categories, setCategories,
+    catsCount, setCatsCount,
     cat, setCat,
     catEmoji, setCatEmoji,
     tapped, setTapped,

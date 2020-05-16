@@ -2,7 +2,7 @@ import React, {useContext, useRef, useEffect, useState} from 'react'
 import { StyleSheet, Text, View, Animated } from 'react-native'
 import { TouchableHighlight, TextInput } from 'react-native-gesture-handler'
 import { StoreContext } from '../../store'
-import db from '../Database'
+// import db from '../Database'
 
 const SpreadsheetItem = (item) => {  
   const { 
@@ -13,6 +13,8 @@ const SpreadsheetItem = (item) => {
   const [ newAmt, setNewAmt ] = useState("");
 
   useEffect(() => {
+    // Here, want to getCats with totals tacked on
+    // If there's no spend/save data yet, should hopefully have a total returned from SQL of 0
 
   }, [newAmt])
 
@@ -44,7 +46,7 @@ const SpreadsheetItem = (item) => {
       <View style={styles.container}>
         <View style={styles.textBox}>
           <Text style={styles.catEmoji}>
-            {item.catEmoji}
+            {item.cat_emoji}
           </Text>
           <Text style={styles.cat}>
             ( {item.cat} )

@@ -2,22 +2,20 @@ import React, { useContext } from 'react'
 import { StoreContext } from '../../store';
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
-import useDb from '../../database/useDb'
+import fetchCats from '../../database/fetchCats'
 
 const AddCat = () => {
   const { 
     cat, setCat, 
     catEmoji, setCatEmoji, 
-    categories, setCategories 
+    categories, setCategories,
+    catsCount, setCatsCount 
   } = useContext( StoreContext )
 
+  // const { isLoading, hasErrored, errMsg, data, addItem }
   // What to pass to useDb here? Categories from context?
   // that's mixing useState and useReducer!
-  const { data, sql } = useDb()
-
-  const sqlAddCat = (cat, catEmoji) => {
-    // db.addCat(cat, catEmoji)
-  }
+  // const { data, sql } = useDb()
 
   return (
     <View style={styles.container}>
@@ -47,8 +45,12 @@ const AddCat = () => {
         <TouchableHighlight
           style={styles.button}
           onPress={() => {
-            setCategories([...categories, {cat, catEmoji}])
-            sqlAddCat(cat, catEmoji)
+            fetchCats.addCat(cat, catEmoji).then(data => {
+              setCategories([...categories, {cat_id: data, cat, cat_emoji: catEmoji}])
+              // console.log(categories)
+              
+            })
+            setCatsCount(catsCount + 1)
             setCat("");
             setCatEmoji("");
           }}

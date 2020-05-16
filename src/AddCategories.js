@@ -1,25 +1,32 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, Text, View, FlatList, Alert } from 'react-native'
 import { StoreContext } from '../store';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import CatItem from './components/CatItem';
 import AddCat from './components/AddCat';
 import { useNavigation } from '@react-navigation/native';
-import useDb from '../database/useDb'
+import fetchCats from '../database/fetchCats'
+// import connection from "../database/Connection"
 
 const AddCategories = () => {
-  const { categories } = useContext( StoreContext );
+  const { 
+    categories, setCategories,
+    catsCount
+  } = useContext( StoreContext );
+  // const [ categories, setCategories ] = useState( [] );
   const navigation = useNavigation()
 
-  const { 
-    data,
-    sql
-  } = useDb([])
-
-
   useEffect(() => {
-    sql.getAll('Categories')
-  }, [data])
+    // fetchCats.deleteAllCats()
+    fetchCats.getCats().then((data) => {
+      setCategories(data)
+    })
+  }, [ catsCount ])
+
+  // useEffect(() => {
+    
+  //   // setCategories(pp)
+  // })
 
 
   // console.log(categoriesC[0])
@@ -32,7 +39,7 @@ const AddCategories = () => {
         keyExtractor={(item) => item.cat}
       />
       {/* only display AddCat if either there's nothing in catarray already or user has pressed button to add new cat */}
-      {(categories.length < 6) && <AddCat 
+      {(categories === undefined || categories.length < 6) && <AddCat 
         style={styles.catInput}
       />}
       <View style={styles.buttonBox}>

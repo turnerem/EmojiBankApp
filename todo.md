@@ -55,7 +55,21 @@
 - each item with totals for a given time span
 - timeseries of totals for one for varying intervals
 - timeseries of overall totals for varying intervals
+- delete all data
 
+# Hook Issues:
+- useContext? Do I want to be able to access same table, without reloading, from different parts of the app?
+- separation of concerns: displaying the table vs doing sql things
+  - maybe for this reason, need to be able to setCategories after a successful sql call - so need a Promise
+- Maybe a reducer can be used to return updated data, and loading state, etc
+  - A function that returns state and the sql functions for affecting that state
+  - but the function does not return the setter of the state (the dispatch)
+  - So other components can use the Categories data, and te sqlFunctions like sqlGetCats, but they can't see dispatch / setCategories
+  - So what is happening in this functional component when it is first called? Is it setting categories in a useEffect?
+    - Does it make sense to do that _every_ time that function is called?
+  - an example:
+    - AddCategories calls sqlGetCats to get back categories, which it displays prettily
+    - Then AddCat wants to sqlAddCat. It doesn't want to pull the cats from the database.
 
 ## Utils:
 - Maybe make a better num formatter
