@@ -53,24 +53,17 @@ const addCat = (cat, catEmoji) => {
           VALUES ( ?, ? );`,
           [ cat, catEmoji ],
           // success cb
-          (_, result) => {
-            // console.log(`new row added with id ${insertId}.`)
-            const { insertId } = result;
-            // tx.executeSql(
-            //   `INSERT INTO SaveEvents ( cat_id, timestamp, amount )
-            //    VALUES ( ?, ?, 0 )`,
-            //   [ 
-            //     insertId, 
-            //     Math.round((new Date()).getTime() / 1000)
-            //   ],
-            //   (_, result2) => {
-            //     console.log("SaveEvents row inserted")
-            //   },
-            //   (_, err2) => {
-            //     console.log("Err in iSaveEvents", err2)
-            //   }
-            // )
-            resolve(insertId)
+          (tx, result) => {
+            console.log(`new row added with id ${result.insertId}.`)
+            tx.executeSql(
+              `INSERT INTO SaveEvents ( cat_id, timestamp, amount )
+               VALUES ( 1, ?, ? );`,
+               [ Math.round((new Date()).getTime() / 1000), 0 ],
+               (_, res2) => {
+                 console.log("This is RES TWO", res2)
+               }
+            )
+            resolve(result.insertId)
             })
           },
           // failure cb
@@ -84,13 +77,33 @@ const addCat = (cat, catEmoji) => {
 const deleteAllCats = () => {
   connection.getDb().transaction(tx => {
     tx.executeSql(
+      `DELETE FROM SaveEvents`,
+      [],
+      (_, success) => {
+        console.log("Table SaveEvents deleted")
+      },
+      (_, fail) => {
+        console.log("table SaveEvents failed!")
+      }
+    )
+    tx.executeSql(
+      `DELETE FROM SpendEvents`,
+      [],
+      (_, success) => {
+        console.log("Table SpendEvents deleted")
+      },
+      (_, fail) => {
+        console.log("table SpendEvents delete failed!")
+      }
+    )
+    tx.executeSql(
       `DELETE FROM Categories`,
       [],
       (_, success) => {
-        console.log("Table contents (?) deleted")
+        console.log("Table Categories deleted")
       },
       (_, fail) => {
-        console.log("table delete failed!")
+        console.log("table Categories delete failed!")
       }
     )
   })
