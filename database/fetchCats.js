@@ -54,13 +54,14 @@ const addCat = (cat, catEmoji) => {
           [ cat, catEmoji ],
           // success cb
           (tx, result) => {
-            console.log(`new row added with id ${result.insertId}.`)
+            const { insertId } = result;
+            console.log(`new row added to Categories, id ${insertId}.`)
             tx.executeSql(
               `INSERT INTO SaveEvents ( cat_id, timestamp, amount )
-               VALUES ( 1, ?, ? );`,
-               [ Math.round((new Date()).getTime() / 1000), 0 ],
+               VALUES ( ?, ?, 0 );`,
+               [ insertId, Math.round((new Date()).getTime() / 1000) ],
                (_, res2) => {
-                 console.log("This is RES TWO", res2)
+                 console.log("new row added to SaveEvents", res2.insertId)
                }
             )
             resolve(result.insertId)
