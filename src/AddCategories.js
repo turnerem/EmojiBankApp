@@ -17,7 +17,7 @@ const AddCategories = () => {
   const navigation = useNavigation()
 
   useEffect(() => {
-    fetchCats.deleteAllCats()
+    // fetchCats.deleteAllCats()
     fetchCats.getCats().then((data) => {
       setCategories(data)
     })

@@ -1,10 +1,23 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, Text, View, FlatList } from 'react-native'
 import { StoreContext } from '../../store'
 import SpreadsheetItem from './SpreadsheetItem';
+import fetchCats from '../../database/fetchCats';
 
 const SpreadsheetContents = () => {
-  const { categories, isSave } = useContext(StoreContext);
+  const { 
+    categories, setCategories,
+    isSave 
+  } = useContext(StoreContext);
+
+  useEffect(() => {
+    console.log("in spreadsheets")
+    const joinTab = isSave ? "SaveEvents" : "SpendEvents";
+    fetchCats.getCats(joinTab).then(data => {
+      setCategories(data) 
+      console.log(data)
+    })
+  }, [])
   return (
       <View style={styles.container}>
       <FlatList

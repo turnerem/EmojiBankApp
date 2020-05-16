@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SignupLogin from './src/SignupLogin';
 import AddCategories from './src/AddCategories';
 import Spreadsheet from './src/Spreadsheet';
-// import connection from './database/Connection';
+import connection from './database/Connection';
 
 const Stack = createStackNavigator();
 // const { closeDb } = connection();

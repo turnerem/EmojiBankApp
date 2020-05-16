@@ -7,80 +7,36 @@ import connection from "./Connection"
 
   // const { categories, setCategories } = useContext(StoreContext)
 
-
-   // should also handle the passing of queries
+  // should also handle the passing of queries
 const getCats = (joinTab = undefined) => {
-  // let sqlStmt = "";
-  // if( joinTab == undefined) {
-  //   console.log("no joining\n")
-  //   sqlStmt = `SELECT * FROM Categories;`;
-  // } else {
-  //   console.log("joining!\n")
-  //   sqlStmt = 
-  //     `SELECT * FROM Categories
-  //      LEFT JOIN (?) ON
-  //      Categories.cat_id = (?).cat_id
-  //      ORDER BY cat_id;`
-  // }
+    return new Promise((resolve) => {
+      connection.getDb().transaction(tx => {
+        tx.executeSql(
+          joinTab ? 
+          `SELECT l.*,  r.cat_id, r.amount
+           FROM Categories l
+           LEFT JOIN SaveEvents r USING (cat_id)
+           GROUP BY l.cat_id;` 
+          // `SELECT * FROM SaveEvents;`
+           :
+          `SELECT * FROM Categories;`, 
 
-  return new Promise((resolve) => {
-    console.log("Starting the sql part\n")
-    connection.getDb().transaction(tx => {
-      tx.executeSql(
-        `SELECT * FROM Categories;`, 
-        [],
-        
-        // success cb
-        (_, result) => {
-          console.log(result.rows.length, 'row count in TAB\n\n')
-          
-          resolve(result.rows._array)
-        },
-        // failure cb
-        (_, err) => {
-          console.log("ERROR in getTab: ", err);
-          })
-        }
-      )
-    }) 
-}
-
-//   // should also handle the passing of queries
-// const getCats = (joinTab = undefined) => {
-//   let sqlStmt = "";
-//   if( joinTab == undefined) {
-//     console.log("no joining\n")
-//     sqlStmt = `SELECT * FROM Categories;`;
-//   } else {
-//     console.log("joining!\n")
-//     sqlStmt = 
-//       `SELECT * FROM Categories
-//        LEFT JOIN (?) ON
-//        Categories.cat_id = (?).cat_id
-//        ORDER BY cat_id;`
-//   }
-
-//   return new Promise((resolve) => {
-//     console.log("Starting the sql part\n", sqlStmt)
-//     connection.getDb().transaction(tx => {
-//       tx.executeSql(
-//         sqlStmt, 
-//         joinTab ? [ joinTab, joinTab ] : [],
-        
-//         // success cb
-//         (_, result) => {
-//           console.log(result.rows.length, 'row count in TAB\n\n')
-          
-//           resolve(result.rows._array)
-//         },
-//         // failure cb
-//         (_, err) => {
-//           console.log("ERROR in getTab: ", err);
-//           })
-//         }
-//       )
-//     }) 
-// }
+          [],
+          // [],
+          // success cb
+          (_, result) => {
+            console.log(result, 'row count in TAB\n\n')
+            
+            resolve(result.rows._array)
+          },
+          // failure cb
+          (_, err) => {
+            console.log("ERROR in getTab: ", err);
+            })
+          }
+        )
+      }) 
+    }
   
   
   // need to make this more generic so that I can add a row to any table
@@ -98,8 +54,23 @@ const addCat = (cat, catEmoji) => {
           [ cat, catEmoji ],
           // success cb
           (_, result) => {
-            console.log(`new row added with id ${result.insertId}.`)
-            resolve(result.insertId)
+            // console.log(`new row added with id ${insertId}.`)
+            const { insertId } = result;
+            // tx.executeSql(
+            //   `INSERT INTO SaveEvents ( cat_id, timestamp, amount )
+            //    VALUES ( ?, ?, 0 )`,
+            //   [ 
+            //     insertId, 
+            //     Math.round((new Date()).getTime() / 1000)
+            //   ],
+            //   (_, result2) => {
+            //     console.log("SaveEvents row inserted")
+            //   },
+            //   (_, err2) => {
+            //     console.log("Err in iSaveEvents", err2)
+            //   }
+            // )
+            resolve(insertId)
             })
           },
           // failure cb

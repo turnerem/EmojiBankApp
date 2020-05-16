@@ -10,6 +10,12 @@ class Connection {
     // On disk, the database will be created under the app's documents directory, i.e. ${FileSystem.documentDirectory}/SQLite/${name}.
     const db = SQLite.openDatabase("EmojiBank.db")
 
+    db.exec(
+      [{ sql: 'PRAGMA foreign_keys = ON;', args: [] }], 
+      false, 
+      () => console.log('Foreign keys turned on')
+    );
+
     // db.transaction(callback, error, success)
     db.transaction(tx => {
       // both these contain executeSqls. They are being enqueued. ENQUEUED.
@@ -28,19 +34,20 @@ class Connection {
       tx.executeSql(
         `CREATE TABLE IF NOT EXISTS SaveEvents (
           event_id INTEGER NOT NULL PRIMARY KEY,
-          cat_id INTEGER NOT NULL FOREIGN KEY REFERENCES Categories(cat_id),
-          timestamp TEXT DEFAULT datetime('now'),
-          amount DOUBLE(10, 2)
-
+          cat_id INTEGER NOT NULL,
+          timestamp INTEGER,
+          amount DOUBLE(10, 2) DEFAULT 0.00,
+          FOREIGN KEY (cat_id) REFERENCES Categories(cat_id)
         );`
       );
           // spend events
     tx.executeSql(
       `CREATE TABLE IF NOT EXISTS SpendEvents (
         event_id INTEGER NOT NULL PRIMARY KEY,
-        cat_id INTEGER NOT NULL FOREIGN KEY REFERENCES Categories(cat_id),
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-        amount DOUBLE(10, 2)
+        cat_id INTEGER NOT NULL,
+        timestamp INTEGER,
+        amount DOUBLE(10, 2),
+        FOREIGN KEY (cat_id) REFERENCES Categories(cat_id)
       );`
     );
 
