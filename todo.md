@@ -71,6 +71,11 @@
     - AddCategories calls sqlGetCats to get back categories, which it displays prettily
     - Then AddCat wants to sqlAddCat. It doesn't want to pull the cats from the database.
 
+## Left Off:
+- search for info on adding TextInput to each item on a list
+- Can I update amout in category without redoing the join?
+  - Possibly can do his in SpreadsheetContents or SpreadsheetItem
+
 ## Utils:
 - Maybe make a better num formatter
 

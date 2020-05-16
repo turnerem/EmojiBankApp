@@ -8,7 +8,8 @@ import fetchCats from '../../database/fetchCats'
 const SpreadsheetItem = (item) => {  
   const { 
     tapped, setTapped,
-    newAmt, setNewAmt
+    newAmt, setNewAmt,
+    categories
   } = useContext(StoreContext);
 
 

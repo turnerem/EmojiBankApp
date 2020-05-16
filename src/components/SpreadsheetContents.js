@@ -18,6 +18,11 @@ const SpreadsheetContents = () => {
       console.log(data)
     })
   }, [newAmt])
+
+  // useEffect(() => {
+    
+  // }, [categories])
+
   return (
       <View style={styles.container}>
       <FlatList
